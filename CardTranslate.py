@@ -5,6 +5,6 @@ class CardTranslate(Card):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def set_back_definition(self):
+    def set_back_definition(self, **kwargs):
         self.back_text = translate(self.front_text)
         self.back_audio = text_to_speech(self.back_text)

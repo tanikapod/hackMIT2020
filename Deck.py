@@ -1,9 +1,9 @@
 def Deck:
     def __init__(self):
-        self.cards = set()
+        self.cards = dict()
 
     def add_card(self, card):
-        self.cards.add(card)
+        self.cards[card] = 
 
     def remove_card(self, card):
         self.cards.remove(card)
