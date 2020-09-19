@@ -1,7 +1,7 @@
 import requests
 import os
 import sys
-from api_keys import TRANSLATE_KEY, TRANSCRIBE_KEY, SYNTHESIZE_KEY
+from api_keys import TRANSLATE_KEY, TRANSCRIBE_KEY, SYNTHESIZE_KEY, DICTIONARY_KEY
 from ibm_watson import TextToSpeechV1, SpeechToTextV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.websocket import RecognizeCallback, AudioSource
@@ -13,9 +13,11 @@ TRANSCRIBE_URL = "https://api.us-south.speech-to-text.watson.cloud.ibm.com/insta
 speech2txt = SpeechToTextV1(authenticator=IAMAuthenticator(TRANSCRIBE_KEY))
 speech2txt.set_service_url(TRANSCRIBE_URL)
 
-SYNTHESIZE_URL = "https://api.us-south.text-to-speech.watson.cloud.ibm.com/instances/acbe076d-033b-4d58-aa6f-b4e60f1fd8cc/v1/synthesize"
+SYNTHESIZE_URL = "https://api.us-south.text-to-speech.watson.cloud.ibm.com"
 txt2speech = TextToSpeechV1(authenticator=IAMAuthenticator(SYNTHESIZE_KEY))
 txt2speech.set_service_url(SYNTHESIZE_URL)
+
+DICTIONARY_URL = "https://owlbot.info/api/v4/dictionary/"
 
 THIS_PATH = os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -88,19 +90,30 @@ def translate(text, source_lang="en", target_lang="es"):
     return translation
 
 def define(text):
-    raise NotImplementedError
+    try:
+        headers = {'Authorization': 'Token '+ DICTIONARY_KEY,}
+        result = requests.get('https://owlbot.info/api/v4/dictionary/' + text, headers=headers)
+    except: print(result.json())
+
+    type = result.json()["definitions"][0]["type"]
+    definitions = result.json()["definitions"][0]["definition"]
+
+    print("{}\n{}: {}".format(text, type, definitions))
+    return type, definitions
 
 if __name__ == "__main__":
-    translation = translate(text="Hello world!",
-                            source_lang="en",
-                            target_lang="es")
+    # translation = translate(text="Hello world!",
+    #                         source_lang="en",
+    #                         target_lang="es")
 
-    speech_to_text(audio_file="audio-file.flac",
-                   source_lang="en-US_BroadbandModel")
+    # speech_to_text(audio_file="testing_audio.m4a",
+    #                source_lang="en-US_BroadbandModel")
 
-    # text_to_speech(text="hello world",
-    #                audio_file="audio.wav")
+    text_to_speech(text="hello world",
+                   audio_file="audio.wav")
 
     # text_to_speech(text=translation,
     #                audio_file="audio.wav",
     #                target_lang="es-ES_EnriqueVoice")
+
+    # definition = define(text = 'hello')
