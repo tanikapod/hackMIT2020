@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+<h2>
+    Paste the text you're reading below.
+</h2>
+
+<form action="annotate" method="GET">
+    <textarea name="paragraph_text" cols="50" rows="10"></textarea>
+    <input type="submit" class="btn" value="Click" name="submit"></input>
+</form>
+
+{% endblock %}
