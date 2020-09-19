@@ -1,7 +1,7 @@
 from utils import text_to_speech
 from abc import ABC, abstractmethod
 
-# TODO: make hashable
+# TODO: make hashable?
 
 class Card(ABC):
     def __init__(self, front_text):
