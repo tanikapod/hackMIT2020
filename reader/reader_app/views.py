@@ -9,4 +9,4 @@ def home(request):
 
 def annotate(request):
     document = Document(text=request.GET.get('paragraph_text'))
-    return render(request, 'templates/document.html', context={doc_text":document.text})
+    return render(request, 'templates/document.html', context={"doc_text":document.text})
