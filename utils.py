@@ -1,7 +1,7 @@
 import requests
 import os
 import sys
-from api_keys import TRANSLATE_KEY, TRANSCRIBE_KEY, SYNTHESIZE_KEY
+from api_keys import TRANSLATE_KEY, TRANSCRIBE_KEY, SYNTHESIZE_KEY, DICTIONARY_KEY
 from ibm_watson import TextToSpeechV1, SpeechToTextV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.websocket import RecognizeCallback, AudioSource
@@ -13,9 +13,11 @@ TRANSCRIBE_URL = "https://api.us-south.speech-to-text.watson.cloud.ibm.com/insta
 speech2txt = SpeechToTextV1(authenticator=IAMAuthenticator(TRANSCRIBE_KEY))
 speech2txt.set_service_url(TRANSCRIBE_URL)
 
-SYNTHESIZE_URL = "https://api.us-south.text-to-speech.watson.cloud.ibm.com/instances/acbe076d-033b-4d58-aa6f-b4e60f1fd8cc/v1/synthesize"
+SYNTHESIZE_URL = "https://api.us-south.text-to-speech.watson.cloud.ibm.com"
 txt2speech = TextToSpeechV1(authenticator=IAMAuthenticator(SYNTHESIZE_KEY))
 txt2speech.set_service_url(SYNTHESIZE_URL)
+
+DICTIONARY_URL = "https://owlbot.info/api/v4/dictionary/"
 
 THIS_PATH = os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -43,14 +45,6 @@ def text_to_speech(text, audio_file, target_lang="en-US_AllisonV3Voice"):
         audio.write(txt2speech.synthesize(text=text,
                                           accept="audio/wav",
                                           voice=target_lang).get_result().content)
-    #
-    # requests.post(url=TXT_TO_SPEECH_URL,
-    #               headers={"Content-Type":"application/json",
-    #                 "Accept":"audio/wav"},
-    #               params={"output":audio_path,
-    #                       "voice":target_lang},
-    #               json={"text":text},
-    #               auth=("apikey", TXT_TO_SPEECH_KEY))
 
 def speech_to_text(audio_file, source_lang="en-US_BroadbandModel"):
     audio_path = "{}/{}".format(THIS_PATH, audio_file)
@@ -88,21 +82,32 @@ def translate(text, source_lang="en", target_lang="es"):
     return translation
 
 def define(text):
-    raise NotImplementedError
+    try:
+        headers = {'Authorization': 'Token '+ DICTIONARY_KEY,}
+        result = requests.get('https://owlbot.info/api/v4/dictionary/' + text, headers=headers)
+    except: print(result.json())
+
+    type = result.json()["definitions"][0]["type"]
+    definitions = result.json()["definitions"][0]["definition"]
+
+    print("{}\n{}: {}".format(text, type, definitions))
+    return type, definitions
 
 if __name__ == "__main__":
     translation = translate(text="Hello world!",
                             source_lang="en",
                             target_lang="es")
 
-    speech_to_text(audio_file="audio-file.flac",
+    speech_to_text(audio_file="audio-file.flac", #"testing_audio.m4a",
                    source_lang="en-US_BroadbandModel")
 
-    # text_to_speech(text="hello world",
-    #                audio_file="audio.wav")
+    text_to_speech(text="hello world",
+                   audio_file="hello_world.wav")
 
-    # text_to_speech(text=translation,
-    #                audio_file="audio.wav",
-    #                target_lang="es-ES_EnriqueVoice")
+    text_to_speech(text=translation,
+                   audio_file="hola_mundo.wav",
+                   target_lang="es-ES_EnriqueVoice")
+
+    definition = define(text = 'hello')
 
     print(translate(text="Education technology, or EdTech, is designed to empower students of all ages and encourage lifelong learning. These projects include any sort of technology that augments and enhances the learning experiences of students, whether it be studying traditional curriculum in a classroom or trying to pick up a new hobby or skill. This track also aims to increase the accessibility of information and accommodate various learning styles and strengths."))

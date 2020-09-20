@@ -1,13 +1,16 @@
 def Deck:
     def __init__(self):
-        self.cards = dict()
+        self.cards = None
 
     def add_card(self, card):
-        self.cards[card] = 
+        raise NotImplementedError
 
     def remove_card(self, card):
-        self.cards.remove(card)
+        raise NotImplementedError
 
     def export_to_csv(self, filename):
         with open(filename + ".csv", "w") as f:
             pass
+
+    def export_to_anki(self, filename):
+        raise NotImplementedError
