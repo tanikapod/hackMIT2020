@@ -45,14 +45,6 @@ def text_to_speech(text, audio_file, target_lang="en-US_AllisonV3Voice"):
         audio.write(txt2speech.synthesize(text=text,
                                           accept="audio/wav",
                                           voice=target_lang).get_result().content)
-    #
-    # requests.post(url=TXT_TO_SPEECH_URL,
-    #               headers={"Content-Type":"application/json",
-    #                 "Accept":"audio/wav"},
-    #               params={"output":audio_path,
-    #                       "voice":target_lang},
-    #               json={"text":text},
-    #               auth=("apikey", TXT_TO_SPEECH_KEY))
 
 def speech_to_text(audio_file, source_lang="en-US_BroadbandModel"):
     audio_path = "{}/{}".format(THIS_PATH, audio_file)
@@ -102,22 +94,20 @@ def define(text):
     return type, definitions
 
 if __name__ == "__main__":
-    # translation = translate(text="Hello world!",
-    #                         source_lang="en",
-    #                         target_lang="es")
+    translation = translate(text="Hello world!",
+                            source_lang="en",
+                            target_lang="es")
 
-    # speech_to_text(audio_file="testing_audio.m4a",
-    #                source_lang="en-US_BroadbandModel")
+    speech_to_text(audio_file="audio-file.flac", #"testing_audio.m4a",
+                   source_lang="en-US_BroadbandModel")
 
     text_to_speech(text="hello world",
-                   audio_file="audio.wav")
+                   audio_file="hello_world.wav")
 
-    # text_to_speech(text=translation,
-    #                audio_file="audio.wav",
-    #                target_lang="es-ES_EnriqueVoice")
+    text_to_speech(text=translation,
+                   audio_file="hola_mundo.wav",
+                   target_lang="es-ES_EnriqueVoice")
 
-# <<<<<<< HEAD
-#     # definition = define(text = 'hello')
-# =======
-#     print(translate(text="Education technology, or EdTech, is designed to empower students of all ages and encourage lifelong learning. These projects include any sort of technology that augments and enhances the learning experiences of students, whether it be studying traditional curriculum in a classroom or trying to pick up a new hobby or skill. This track also aims to increase the accessibility of information and accommodate various learning styles and strengths."))
-# >>>>>>> 7ed21bc08ca86f5ccc4c15a898b3c5d97b4eeb17
+    definition = define(text = 'hello')
+
+    print(translate(text="Education technology, or EdTech, is designed to empower students of all ages and encourage lifelong learning. These projects include any sort of technology that augments and enhances the learning experiences of students, whether it be studying traditional curriculum in a classroom or trying to pick up a new hobby or skill. This track also aims to increase the accessibility of information and accommodate various learning styles and strengths."))
