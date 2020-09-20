@@ -116,4 +116,8 @@ if __name__ == "__main__":
     #                audio_file="audio.wav",
     #                target_lang="es-ES_EnriqueVoice")
 
-    # definition = define(text = 'hello')
+# <<<<<<< HEAD
+#     # definition = define(text = 'hello')
+# =======
+#     print(translate(text="Education technology, or EdTech, is designed to empower students of all ages and encourage lifelong learning. These projects include any sort of technology that augments and enhances the learning experiences of students, whether it be studying traditional curriculum in a classroom or trying to pick up a new hobby or skill. This track also aims to increase the accessibility of information and accommodate various learning styles and strengths."))
+# >>>>>>> 7ed21bc08ca86f5ccc4c15a898b3c5d97b4eeb17
